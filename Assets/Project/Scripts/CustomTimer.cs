@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Project.Scripts
@@ -11,25 +12,36 @@ namespace Project.Scripts
         public event Action OnTimerContinued;
         public event Action OnTimerReset;
         
+        private readonly MonoBehaviour _coroutineRunner;
+        private Coroutine _currentCoroutine;
+        
         public float Duration { get; }
         public float ElapsedTime { get; private set; }
         public bool IsRunning { get; private set; }
+        
+        public bool IsTimerPaused() => IsRunning == false && _currentCoroutine is not null;
 
-        public CustomTimer(float duration)
+        public CustomTimer(float duration, MonoBehaviour coroutineRunner)
         {
             Duration = duration;
+            _coroutineRunner = coroutineRunner;
         }
 
         public void Reset()
         {
             ElapsedTime = 0;
             IsRunning = false;
+            
+            if (_currentCoroutine != null)
+                _coroutineRunner.StopCoroutine(_currentCoroutine);
+            
             OnTimerReset?.Invoke();
         }
 
         public void Start()
         {
             IsRunning = true;
+            _currentCoroutine = _coroutineRunner.StartCoroutine(RunRoutine());
             OnTimerStarted?.Invoke();
         }
 
@@ -46,18 +58,19 @@ namespace Project.Scripts
             OnTimerContinued?.Invoke();
         }
 
-        public void Update()
+        private IEnumerator RunRoutine()
         {
-            if (IsRunning == false)
-                return;
-            
-            ElapsedTime += Time.deltaTime;
-
-            if (ElapsedTime >= Duration)
+            while (ElapsedTime < Duration)
             {
-                IsRunning = false;
-                OnTimerEnded?.Invoke();
+                if (IsRunning)
+                    ElapsedTime += Time.deltaTime;
+                
+                yield return null;
             }
+            
+            IsRunning = false;
+            _currentCoroutine = null;
+            OnTimerEnded?.Invoke();
         }
     }
 }

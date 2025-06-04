@@ -11,16 +11,75 @@ namespace Project.Scripts
         [SerializeField] private Image _heartPrefab;
         [SerializeField] private GameObject _heartContainer;
         
+        [SerializeField] private float _timerDuration;
+        
+        public CustomTimer CustomTimer;
+        
         private readonly List<Image> _hearts = new();
         private int _maxHeartsCount;
         
-        public void Initialize(int maxHeartsCount)
+        private void Awake()
         {
-            _maxHeartsCount = maxHeartsCount;
+            CustomTimer = new CustomTimer(_timerDuration, this);
+            
+            CustomTimer.OnTimerStarted += OnTimerStarted;
+            CustomTimer.OnTimerPaused += OnTimerPaused;
+            CustomTimer.OnTimerContinued += OnTimerContinued;
+            CustomTimer.OnTimerEnded += OnTimerEnded;
+            CustomTimer.OnTimerReset += OnTimerReset;
+            
+            _maxHeartsCount = Mathf.FloorToInt(CustomTimer.Duration);
+            Reset();
+        }
+        
+        private void OnDestroy()
+        {
+            CustomTimer.OnTimerStarted -= OnTimerStarted;
+            CustomTimer.OnTimerPaused -= OnTimerPaused;
+            CustomTimer.OnTimerContinued -= OnTimerContinued;
+            CustomTimer.OnTimerEnded -= OnTimerEnded;
+            CustomTimer.OnTimerReset -= OnTimerReset;
+        }
+        
+        public void UpdateView()
+        {
+            if (CustomTimer.IsRunning == false)
+                return;
+            
+            Debug.Log("HeartsTimer Elapsed Time: " + CustomTimer.ElapsedTime);
+            UpdateView(CustomTimer.ElapsedTime);
+        }
+        
+        private void OnTimerStarted()
+        {
+            Debug.Log("HeartsTimer Started");
+            Enable();
+        }
+
+        private void OnTimerPaused()
+        {
+            Debug.Log("HeartsTimer Paused");
+            Disable();
+        }
+
+        private void OnTimerContinued()
+        {
+            Debug.Log("HeartsTimer continued");
+            Enable();
+        }
+
+        private void OnTimerEnded()
+        {
+            Debug.Log("HeartsTimer Ended");
+        }
+
+        private void OnTimerReset()
+        {
+            Debug.Log("HeartsTimer Reset");
             Reset();
         }
 
-        public void Reset()
+        private void Reset()
         {
             foreach (Image heart in _hearts)
                 Destroy(heart.gameObject);
@@ -36,7 +95,7 @@ namespace Project.Scripts
             Disable();
         }
         
-        public void Enable()
+        private void Enable()
         {
             for (int i = 0; i < _hearts.Count; i++)
             {
@@ -48,7 +107,7 @@ namespace Project.Scripts
             }
         }
 
-        public void Disable()
+        private void Disable()
         {
             for (int i = 0; i < _hearts.Count; i++)
             {
@@ -60,7 +119,7 @@ namespace Project.Scripts
             }
         }
 
-        public void UpdateView(float elapsedTime)
+        private void UpdateView(float elapsedTime)
         {
             if (_hearts.Count > 0 && elapsedTime - (_maxHeartsCount - _hearts.Count) > 1)
             {

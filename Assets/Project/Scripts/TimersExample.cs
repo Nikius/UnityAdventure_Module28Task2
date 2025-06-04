@@ -5,40 +5,42 @@ namespace Project.Scripts
 {
     public class TimersExample : MonoBehaviour
     {
-        [SerializeField] private SliderTimerService _sliderTimerService;
-        [SerializeField] private HeartsTimerService _heartsTimerService;
+        [SerializeField] private SliderTimerView _sliderTimerView;
+        [SerializeField] private HeartsTimerView _heartsTimerView;
         
-        private TimerService _currentTimerService;
+        private CustomTimer _currentTimer;
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                _currentTimerService = _sliderTimerService;
+                _currentTimer = _sliderTimerView.CustomTimer;
                 Debug.Log("Slider Timer Selected");
             }
             
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                _currentTimerService = _heartsTimerService;
+                _currentTimer = _heartsTimerView.CustomTimer;
                 Debug.Log("Hearts Timer Selected");
             }
             
-            if (_currentTimerService == null)
+            if (_currentTimer == null)
                 return;
             
-            if (Input.GetKeyDown(KeyCode.S) && _currentTimerService.IsTimerRunning() == false)
-                _currentTimerService.StartTimer();
+            if (Input.GetKeyDown(KeyCode.S) && _currentTimer.IsRunning == false)
+                _currentTimer.Start();
             
-            if (Input.GetKeyDown(KeyCode.P) && _currentTimerService.IsTimerRunning())
-                _currentTimerService.PauseTimer();
+            if (Input.GetKeyDown(KeyCode.P) && _currentTimer.IsRunning)
+                _currentTimer.Pause();
             
-            if (Input.GetKeyDown(KeyCode.C) && _currentTimerService.IsTimerPaused())
-                _currentTimerService.ContinueTimer();
+            if (Input.GetKeyDown(KeyCode.C) && _currentTimer.IsTimerPaused())
+                _currentTimer.Continue();
             
             if (Input.GetKeyDown(KeyCode.R))
-                _currentTimerService.ResetTimer();
-                
+                _currentTimer.Reset();
+            
+            _sliderTimerView.UpdateView();
+            _heartsTimerView.UpdateView();
         }
     }
 }

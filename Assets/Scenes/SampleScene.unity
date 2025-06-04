@@ -609,11 +609,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 637105543}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b85742fd409d4a148baa69de8722f21b, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b35aa09adae4c3fb57a1b1221384d6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timerDuration: 10
   _slider: {fileID: 1757664793}
+  _timerDuration: 10
 --- !u!1 &657848280
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,7 +624,6 @@ GameObject:
   m_Component:
   - component: {fileID: 657848281}
   - component: {fileID: 657848282}
-  - component: {fileID: 657848283}
   m_Layer: 5
   m_Name: Hearts
   m_TagString: Untagged
@@ -677,21 +676,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &657848283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 657848280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d22d6210ff5fbfd44aa24b7f532c1fab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _heartPrefab: {fileID: 2615038757006419981, guid: ededf9ed76682194083fbc56bbb780e6,
-    type: 3}
-  _heartContainer: {fileID: 657848280}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,7 +872,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1263558200}
-  - component: {fileID: 1263558199}
+  - component: {fileID: 1263558201}
   m_Layer: 5
   m_Name: HeartsTimer
   m_TagString: Untagged
@@ -896,20 +880,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1263558199
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263558198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9f522ca81884161845db836cf5870b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _timerDuration: 10
-  _heartsTimerView: {fileID: 657848283}
 --- !u!224 &1263558200
 RectTransform:
   m_ObjectHideFlags: 0
@@ -930,6 +900,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1263558201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263558198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22d6210ff5fbfd44aa24b7f532c1fab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _heartPrefab: {fileID: 2615038757006419981, guid: ededf9ed76682194083fbc56bbb780e6,
+    type: 3}
+  _heartContainer: {fileID: 657848280}
+  _timerDuration: 10
 --- !u!1 &1362165319
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,7 +1019,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -50.000046}
+  m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: -1200, y: -899.99994}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1667083762
@@ -1181,8 +1167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59267189a3ac43b4fbac05e706010541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sliderTimerService: {fileID: 637105545}
-  _heartsTimerService: {fileID: 1263558199}
+  _sliderTimerView: {fileID: 637105545}
+  _heartsTimerView: {fileID: 1263558201}
 --- !u!4 &1791846198
 Transform:
   m_ObjectHideFlags: 0
