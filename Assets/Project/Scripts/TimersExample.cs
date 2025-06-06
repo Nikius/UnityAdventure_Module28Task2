@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project.Scripts
@@ -8,19 +9,33 @@ namespace Project.Scripts
         [SerializeField] private SliderTimerView _sliderTimerView;
         [SerializeField] private HeartsTimerView _heartsTimerView;
         
+        [SerializeField] private float _timerDuration;
+
+        private CustomTimer _sliderTimer;
+        private CustomTimer _heartTimer;
+        
         private CustomTimer _currentTimer;
+
+        private void Awake()
+        {
+            _sliderTimer = new CustomTimer(_timerDuration, this);
+            _sliderTimerView.Initialize(_sliderTimer);
+            
+            _heartTimer = new CustomTimer(_timerDuration, this);
+            _heartsTimerView.Initialize(_heartTimer);
+        }
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                _currentTimer = _sliderTimerView.CustomTimer;
+                _currentTimer = _sliderTimer;
                 Debug.Log("Slider Timer Selected");
             }
             
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                _currentTimer = _heartsTimerView.CustomTimer;
+                _currentTimer = _heartTimer;
                 Debug.Log("Hearts Timer Selected");
             }
             
@@ -38,9 +53,6 @@ namespace Project.Scripts
             
             if (Input.GetKeyDown(KeyCode.R))
                 _currentTimer.Reset();
-            
-            _sliderTimerView.UpdateView();
-            _heartsTimerView.UpdateView();
         }
     }
 }

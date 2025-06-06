@@ -6,6 +6,7 @@ namespace Project.Scripts
 {
     public class CustomTimer
     {
+        public event Action OnUpdated;
         public event Action OnTimerEnded;
         public event Action OnTimerStarted;
         public event Action OnTimerPaused;
@@ -36,6 +37,7 @@ namespace Project.Scripts
                 _coroutineRunner.StopCoroutine(_currentCoroutine);
             
             OnTimerReset?.Invoke();
+            OnUpdated?.Invoke();
         }
 
         public void Start()
@@ -63,7 +65,10 @@ namespace Project.Scripts
             while (ElapsedTime < Duration)
             {
                 if (IsRunning)
+                {
                     ElapsedTime += Time.deltaTime;
+                    OnUpdated?.Invoke();
+                }
                 
                 yield return null;
             }

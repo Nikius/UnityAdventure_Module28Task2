@@ -613,7 +613,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _slider: {fileID: 1757664793}
-  _timerDuration: 10
 --- !u!1 &657848280
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,7 +914,6 @@ MonoBehaviour:
   _heartPrefab: {fileID: 2615038757006419981, guid: ededf9ed76682194083fbc56bbb780e6,
     type: 3}
   _heartContainer: {fileID: 657848280}
-  _timerDuration: 10
 --- !u!1 &1362165319
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,6 +1167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sliderTimerView: {fileID: 637105545}
   _heartsTimerView: {fileID: 1263558201}
+  _timerDuration: 10
 --- !u!4 &1791846198
 Transform:
   m_ObjectHideFlags: 0

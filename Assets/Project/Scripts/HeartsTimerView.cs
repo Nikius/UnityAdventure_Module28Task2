@@ -10,44 +10,46 @@ namespace Project.Scripts
         
         [SerializeField] private Image _heartPrefab;
         [SerializeField] private GameObject _heartContainer;
-        
-        [SerializeField] private float _timerDuration;
-        
-        public CustomTimer CustomTimer;
+
+        private CustomTimer _customTimer;
         
         private readonly List<Image> _hearts = new();
         private int _maxHeartsCount;
-        
-        private void Awake()
-        {
-            CustomTimer = new CustomTimer(_timerDuration, this);
-            
-            CustomTimer.OnTimerStarted += OnTimerStarted;
-            CustomTimer.OnTimerPaused += OnTimerPaused;
-            CustomTimer.OnTimerContinued += OnTimerContinued;
-            CustomTimer.OnTimerEnded += OnTimerEnded;
-            CustomTimer.OnTimerReset += OnTimerReset;
-            
-            _maxHeartsCount = Mathf.FloorToInt(CustomTimer.Duration);
-            Reset();
-        }
-        
+
         private void OnDestroy()
         {
-            CustomTimer.OnTimerStarted -= OnTimerStarted;
-            CustomTimer.OnTimerPaused -= OnTimerPaused;
-            CustomTimer.OnTimerContinued -= OnTimerContinued;
-            CustomTimer.OnTimerEnded -= OnTimerEnded;
-            CustomTimer.OnTimerReset -= OnTimerReset;
+            _customTimer.OnTimerStarted -= OnTimerStarted;
+            _customTimer.OnTimerPaused -= OnTimerPaused;
+            _customTimer.OnTimerContinued -= OnTimerContinued;
+            _customTimer.OnTimerEnded -= OnTimerEnded;
+            _customTimer.OnTimerReset -= OnTimerReset;
+            _customTimer.OnUpdated -= OnTimerUpdated;
+        }
+
+        public void Initialize(CustomTimer customTimer)
+        {
+            _customTimer = customTimer;
+            
+            _customTimer.OnTimerStarted += OnTimerStarted;
+            _customTimer.OnTimerPaused += OnTimerPaused;
+            _customTimer.OnTimerContinued += OnTimerContinued;
+            _customTimer.OnTimerEnded += OnTimerEnded;
+            _customTimer.OnTimerReset += OnTimerReset;
+            _customTimer.OnUpdated += OnTimerUpdated;
+            
+            _maxHeartsCount = Mathf.FloorToInt(_customTimer.Duration);
+            Reset();
+        }
+
+        private void UpdateView()
+        {
+            Debug.Log("HeartsTimer Elapsed Time: " + _customTimer.ElapsedTime);
+            UpdateView(_customTimer.ElapsedTime);
         }
         
-        public void UpdateView()
+        private void OnTimerUpdated()
         {
-            if (CustomTimer.IsRunning == false)
-                return;
-            
-            Debug.Log("HeartsTimer Elapsed Time: " + CustomTimer.ElapsedTime);
-            UpdateView(CustomTimer.ElapsedTime);
+            UpdateView();
         }
         
         private void OnTimerStarted()

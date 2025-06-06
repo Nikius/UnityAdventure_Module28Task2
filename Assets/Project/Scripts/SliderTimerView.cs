@@ -7,39 +7,42 @@ namespace Project.Scripts
     public class SliderTimerView : MonoBehaviour
     {
         [SerializeField] private Slider _slider;
-        [SerializeField] private float _timerDuration;
-        
-        public CustomTimer CustomTimer;
-        
-        private void Awake()
+
+        private CustomTimer _customTimer;
+
+        private void OnDestroy()
         {
-            CustomTimer = new CustomTimer(_timerDuration, this);
+            _customTimer.OnTimerStarted -= OnTimerStarted;
+            _customTimer.OnTimerPaused -= OnTimerPaused;
+            _customTimer.OnTimerContinued -= OnTimerContinued;
+            _customTimer.OnTimerEnded -= OnTimerEnded;
+            _customTimer.OnTimerReset -= OnTimerReset;
+            _customTimer.OnUpdated -= OnTimerUpdated;
+        }
+
+        public void Initialize(CustomTimer customTimer)
+        {
+            _customTimer = customTimer;
             
-            CustomTimer.OnTimerStarted += OnTimerStarted;
-            CustomTimer.OnTimerPaused += OnTimerPaused;
-            CustomTimer.OnTimerContinued += OnTimerContinued;
-            CustomTimer.OnTimerEnded += OnTimerEnded;
-            CustomTimer.OnTimerReset += OnTimerReset;
+            _customTimer.OnTimerStarted += OnTimerStarted;
+            _customTimer.OnTimerPaused += OnTimerPaused;
+            _customTimer.OnTimerContinued += OnTimerContinued;
+            _customTimer.OnTimerEnded += OnTimerEnded;
+            _customTimer.OnTimerReset += OnTimerReset;
+            _customTimer.OnUpdated += OnTimerUpdated;
             
             Reset();
         }
-        
-        private void OnDestroy()
+
+        private void UpdateView()
         {
-            CustomTimer.OnTimerStarted -= OnTimerStarted;
-            CustomTimer.OnTimerPaused -= OnTimerPaused;
-            CustomTimer.OnTimerContinued -= OnTimerContinued;
-            CustomTimer.OnTimerEnded -= OnTimerEnded;
-            CustomTimer.OnTimerReset -= OnTimerReset;
+            Debug.Log("SliderTimer Elapsed Time: " + _customTimer.ElapsedTime);
+            _slider.value = 1 - _customTimer.ElapsedTime / _customTimer.Duration;
         }
-        
-        public void UpdateView()
+
+        private void OnTimerUpdated()
         {
-            if (CustomTimer.IsRunning == false)
-                return;
-            
-            Debug.Log("SliderTimer Elapsed Time: " + CustomTimer.ElapsedTime);
-            _slider.value = 1 - CustomTimer.ElapsedTime / CustomTimer.Duration;
+            UpdateView();
         }
         
         private void OnTimerStarted()
